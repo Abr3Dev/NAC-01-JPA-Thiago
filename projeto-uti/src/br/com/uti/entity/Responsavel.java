@@ -1,5 +1,6 @@
 package br.com.uti.entity;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -25,7 +27,7 @@ public class Responsavel {
 	@GeneratedValue(generator = "responsavel", strategy = GenerationType.SEQUENCE)
 	private long codigo;
 
-	@Column(name = "ds_nome", nullable = false, length = 50)
+	@Column(name = "ds_nome", nullable = false, length = 100)
 	private String nome;
 
 	@Column(name = "dt_nascimento")
@@ -45,25 +47,24 @@ public class Responsavel {
 	private String parentesco;
 
 	@OneToMany(mappedBy = "responsavel", cascade = CascadeType.ALL)
-	private List<Endereco> enderecos;
+	private List<Endereco> enderecos = new ArrayList<Endereco>();
+
+	@OneToOne(mappedBy = "responsavel", cascade = CascadeType.ALL)
+	private Paciente paciente;
 
 	public Responsavel() {
 	}
 
-	public Responsavel(String nome, Calendar dataNascimento, char sexo, String cpf, String telefone, String parentesco) {
-			//List<Endereco> enderecos) {
-		super();
+	public Responsavel(String nome, Calendar dataNascimento, char sexo, String cpf, String telefone,
+			String parentesco) {
+
 		this.nome = nome;
 		this.dataNascimento = dataNascimento;
 		this.sexo = sexo;
 		this.cpf = cpf;
 		this.telefone = telefone;
 		this.parentesco = parentesco;
-		this.enderecos = enderecos;
-	}
 
-	public Responsavel(String string) {
-		// TODO Auto-generated constructor stub
 	}
 
 	public long getCodigo() {
@@ -130,4 +131,16 @@ public class Responsavel {
 		this.enderecos = enderecos;
 	}
 
+	public Paciente getPaciente() {
+		return paciente;
+	}
+
+	public void setPaciente(Paciente paciente) {
+		this.paciente = paciente;
+	}
+
+	public void addEndereco(Endereco endereco) {
+		enderecos.add(endereco);
+		endereco.setResponsavel(this);
+	}
 }

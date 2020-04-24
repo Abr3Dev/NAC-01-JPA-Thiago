@@ -1,4 +1,4 @@
-package br.com.uti.entity;
+ package br.com.uti.entity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -50,46 +50,29 @@ public class Medico {
 	@Column(name = "tp_sanguineo", nullable = false)
 	private TipoSanguineo tipoSanguineo;
 
-	@ManyToMany(mappedBy = "medicos")
-	private List<Medicacao> medicacoes = new ArrayList<Medicacao>();
+	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@JoinTable(name = "tb_medico_medicacao", joinColumns = @JoinColumn(name = "id_medico"), inverseJoinColumns = @JoinColumn(name = "id_medicacao"))
+	private List<Medicacao> medicacoes;
 
-	@ManyToMany(mappedBy = "medicos")
-	private List<Exame> exames = new ArrayList<Exame>();
+	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@JoinTable(name = "tb_medico_exame", joinColumns = @JoinColumn(name = "id_medico"), inverseJoinColumns = @JoinColumn(name = "id_exame"))
+	private List<Exame> exames;
 
-	//@OneToMany(mappedBy = "medico")
-	//private List<Paciente> pacientes;
+	@OneToMany(mappedBy = "medico", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	private List<Paciente> pacientes = new ArrayList<Paciente>();
 
 	public Medico() {
 	}
 
-	public Medico(String crm, String nome, Calendar dataNascimento, String nacionalidade, TipoSanguineo tipoSanguineo,
-			List<Medicacao> medicacoes, List<Exame> exames, List<Paciente> pacientes) {
-		super();
-		this.crm = crm;
-		this.nome = nome;
-		this.dataNascimento = dataNascimento;
-		this.nacionalidade = nacionalidade;
-		this.tipoSanguineo = tipoSanguineo;
-		//this.medicacoes = medicacoes;
-		this.exames = exames;
-		//this.pacientes = pacientes;
-	}
-
-	//construtor teste relacionamento Medico_Medicacao, excluir esse grupo de código após teste
 	public Medico(String crm, String nome, Calendar dataNascimento, String nacionalidade, TipoSanguineo tipoSanguineo) {
+		
 		this.crm = crm;
 		this.nome = nome;
 		this.dataNascimento = dataNascimento;
 		this.nacionalidade = nacionalidade;
 		this.tipoSanguineo = tipoSanguineo;
-		
-	}
-	public Medico(String string, String string2, Object object, String string3, TipoSanguineo aPositvo,
-			List<Medicacao> asList) {
-		// TODO Auto-generated constructor stub
 	}
 
-	//fim construtor teste
 	public long getCodigo() {
 		return codigo;
 	}
@@ -138,6 +121,13 @@ public class Medico {
 		this.tipoSanguineo = tipoSanguineo;
 	}
 
+	public List<Medicacao> getMedicacoes() {
+		return medicacoes;
+	}
+
+	public void setMedicacoes(List<Medicacao> medicacoes) {
+		this.medicacoes = medicacoes;
+	}
 
 	public List<Exame> getExames() {
 		return exames;
@@ -147,12 +137,16 @@ public class Medico {
 		this.exames = exames;
 	}
 
-	//public List<Paciente> getPacientes() {
-		//return pacientes;
-	//}
+	public List<Paciente> getPacientes() {
+		return pacientes;
+	}
 
-	//public void setPacientes(List<Paciente> pacientes) {
-		//this.pacientes = pacientes;
-	//}
+	public void setPacientes(List<Paciente> pacientes) {
+		this.pacientes = pacientes;
+	}
 
+	public void addPaciente(Paciente paciente) {
+		pacientes.add(paciente);
+		paciente.setMedico(this);
+	}
 }

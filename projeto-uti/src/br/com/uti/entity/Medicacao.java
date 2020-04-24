@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -44,50 +45,38 @@ public class Medicacao {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Calendar dataMedicacao;
 
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "tb_medico_medicacao",
-			   joinColumns = @JoinColumn(name = "id_medicacao", insertable = true, updatable = true), inverseJoinColumns = @JoinColumn(name = "id_medico", insertable = true, updatable = true))
+	@ManyToMany(mappedBy = "medicacoes", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	private List<Medico> medicos = new ArrayList<Medico>();
 
-	//@ManyToMany(mappedBy = "medicacoes")
-	//private List<Paciente> pacientes;
+	@ManyToMany(mappedBy = "medicacoes", cascade = CascadeType.ALL)
+	private List<Paciente> pacientes;
 
-	@ManyToMany(mappedBy = "medicacoes")
+	@ManyToMany(mappedBy = "medicacoes", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	private List<Enfermeiro> enfermeiros = new ArrayList<Enfermeiro>();
 
 	public Medicacao() {
 	}
 
-//Construtor criado para testar o relacionamento Medico_Medicacao após teste deletar esse bloco de código e deixar o construtor completo
-	public Medicacao(String nome, float dosagem, String descricao, String observacao, Calendar dataMedicacao, List<Medico> medicos) {
+	public Medicacao(String nome, float dosagem, String descricao, String observacao, Calendar dataMedicacao) {
 
 		this.nome = nome;
 		this.dosagem = dosagem;
 		this.descricao = descricao;
 		this.observacao = observacao;
 		this.dataMedicacao = dataMedicacao;
-		this.medicos = medicos;
+
 	}
-// Fim do Construtor teste
-	
-	// Construtor completo
+
 	public Medicacao(String nome, float dosagem, String descricao, String observacao, Calendar dataMedicacao,
-			List<Medico> medicos, List<Paciente> pacientes, List<Enfermeiro> enfermeiros) {
-
+			List<Object> lista) {
 		this.nome = nome;
 		this.dosagem = dosagem;
 		this.descricao = descricao;
 		this.observacao = observacao;
 		this.dataMedicacao = dataMedicacao;
-		this.medicos = medicos;
-		//this.pacientes = pacientes;
-		this.enfermeiros = enfermeiros;
-	}
-	public Medicacao(String string, float f, String string2, String string3, Calendar instance) {
-		// TODO Auto-generated constructor stub
+
 	}
 
-	//Fim construtor completo
 	public long getCodigo() {
 		return codigo;
 	}
@@ -144,13 +133,13 @@ public class Medicacao {
 		this.medicos = medicos;
 	}
 
-	//public List<Paciente> getPacientes() {
-		//return pacientes;
-	//}
+	public List<Paciente> getPacientes() {
+		return pacientes;
+	}
 
-	//public void setPacientes(List<Paciente> pacientes) {
-		//this.pacientes = pacientes;
-	//}
+	public void setPacientes(List<Paciente> pacientes) {
+		this.pacientes = pacientes;
+	}
 
 	public List<Enfermeiro> getEnfermeiros() {
 		return enfermeiros;

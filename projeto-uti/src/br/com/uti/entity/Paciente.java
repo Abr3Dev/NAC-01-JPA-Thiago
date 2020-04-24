@@ -13,6 +13,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -55,29 +58,30 @@ public class Paciente {
 
 	// no contexto de internação, muitos pacientes são internados por um médico, mas
 	// cada paciente só é internado por um médico
-	//@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
-	//@JoinColumn(name = "id_medico", nullable = false)
-	//private Medico medico;
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_medico", nullable = false)
+	private Medico medico;
 
 	// Apenas um responsável é cadastrado para cada paciente.
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_responsavel", nullable = false, unique = true)
 	private Responsavel responsavel;
 
-	//@ManyToMany(fetch = FetchType.LAZY)
-	//@JoinTable(name = "tb_paciente_medicacao", joinColumns = @JoinColumn(name = "id_paciente"), inverseJoinColumns = @JoinColumn(name = "id_medicacao"))
-	//private List<Medicacao> medicacoes;
+	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@JoinTable(name = "tb_paciente_medicacao", joinColumns = @JoinColumn(name = "id_paciente"), inverseJoinColumns = @JoinColumn(name = "id_medicacao"))
+	private List<Medicacao> medicacoes;
 
-	//@ManyToMany(mappedBy = "pacientes")
-	//private List<Exame> exames;
+	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@JoinTable(name = "tb_paciente_exame", joinColumns = @JoinColumn(name = "id_paciente"), inverseJoinColumns = @JoinColumn(name = "id_exame"))
+	private List<Exame> exames;
 
 	public Paciente() {
 	}
 
 	public Paciente(String nome, Calendar dataNascimento, char sexo, TipoSanguineo tipoSanguineo,
-			String alergiaMedicacao, String etnia, EstadoPaciente estadoPaciente, Medico medico,
-			Responsavel responsavel, List<Medicacao> medicacoes, List<Exame> exames) {
-		super();
+			String alergiaMedicacao, String etnia, EstadoPaciente estadoPaciente, Responsavel responsavel,
+			Medico medico) {
+
 		this.nome = nome;
 		this.dataNascimento = dataNascimento;
 		this.sexo = sexo;
@@ -85,24 +89,8 @@ public class Paciente {
 		this.alergiaMedicacao = alergiaMedicacao;
 		this.etnia = etnia;
 		this.estadoPaciente = estadoPaciente;
-		//this.medico = medico;
 		this.responsavel = responsavel;
-		//this.medicacoes = medicacoes;
-		//this.exames = exames;
-	}
-
-	public Paciente(String string) {
-		// TODO Auto-generated constructor stub
-	}
-
-	public Paciente(String nome, Calendar dataNascimento, char sexo, TipoSanguineo tipoSanguineo, EstadoPaciente estadoPaciente,
-			Responsavel responsavel) {
-		this.nome = nome;
-		this.dataNascimento = dataNascimento;
-		this.sexo = sexo;
-		this.tipoSanguineo = tipoSanguineo;
-		this.estadoPaciente = estadoPaciente;
-		this.responsavel = responsavel;
+		this.medico = medico;
 	}
 
 	public long getCodigo() {
@@ -169,13 +157,13 @@ public class Paciente {
 		this.estadoPaciente = estadoPaciente;
 	}
 
-//	public Medico getMedico() {
-//		return medico;
-//	}
+	public Medico getMedico() {
+		return medico;
+	}
 
-//	public void setMedico(Medico medico) {
-//		this.medico = medico;
-//	}
+	public void setMedico(Medico medico) {
+		this.medico = medico;
+	}
 
 	public Responsavel getResponsavel() {
 		return responsavel;
@@ -185,20 +173,20 @@ public class Paciente {
 		this.responsavel = responsavel;
 	}
 
-	//public List<Medicacao> getMedicacoes() {
-		//return medicacoes;
-	//}
+	public List<Medicacao> getMedicacoes() {
+		return medicacoes;
+	}
 
-	//public void setMedicacoes(List<Medicacao> medicacoes) {
-		//this.medicacoes = medicacoes;
-	//}
+	public void setMedicacoes(List<Medicacao> medicacoes) {
+		this.medicacoes = medicacoes;
+	}
 
-	//public List<Exame> getExames() {
-		//return exames;
-	//}
+	public List<Exame> getExames() {
+		return exames;
+	}
 
-	//public void setExames(List<Exame> exames) {
-		//this.exames = exames;
-	//}
+	public void setExames(List<Exame> exames) {
+		this.exames = exames;
+	}
 
 }

@@ -3,6 +3,7 @@ package br.com.uti.entity;
 import java.util.Calendar;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -37,25 +38,20 @@ public class Exame {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Calendar dataExame;
 
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "tb_exame_medico", joinColumns = @JoinColumn(name = "id_exame"), inverseJoinColumns = @JoinColumn(name = "id_medico"))
+	@ManyToMany(mappedBy = "exames", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	private List<Medico> medicos;
 
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "tb_exame_paciente", joinColumns = @JoinColumn(name = "id_exame"), inverseJoinColumns = @JoinColumn(name = "id_paciente"))
+	@ManyToMany(mappedBy = "exames", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	private List<Paciente> pacientes;
 
 	public Exame() {
 	}
 
-	public Exame(String tipoExame, String observacao, Calendar dataExame, List<Medico> medicos,
-			List<Paciente> pacientes) {
+	public Exame(String tipoExame, String observacao, Calendar dataExame) {
 
 		this.tipoExame = tipoExame;
 		this.observacao = observacao;
 		this.dataExame = dataExame;
-		this.medicos = medicos;
-		this.pacientes = pacientes;
 	}
 
 	public long getCodigo() {

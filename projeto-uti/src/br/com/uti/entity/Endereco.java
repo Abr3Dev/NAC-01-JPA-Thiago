@@ -9,6 +9,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -43,19 +44,20 @@ public class Endereco {
 	@Column(name = "ds_cidade", nullable = false, length = 100)
 	private String cidade;
 
-	@Column(name = "en_uf")
+	@Column(name = "tp_uf")
 	@Enumerated(EnumType.STRING)
 	private UF uf;
 
 	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
+	@JoinColumn(name = "id_responsavel", nullable = false)
 	private Responsavel responsavel;
 
 	public Endereco() {
 	}
 
 	public Endereco(String logradouro, String numero, String complemento, String cep, String bairro, String cidade,
-			UF uf, Responsavel responsavel) {
-		super();
+			UF uf) {
+
 		this.logradouro = logradouro;
 		this.numero = numero;
 		this.complemento = complemento;
@@ -63,12 +65,7 @@ public class Endereco {
 		this.bairro = bairro;
 		this.cidade = cidade;
 		this.uf = uf;
-		this.responsavel = responsavel;
-	}
 
-	public Endereco(String string, String string2, String string3, String string4, String string5, String string6,
-			UF sp) {
-		// TODO Auto-generated constructor stub
 	}
 
 	public long getCodigo() {

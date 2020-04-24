@@ -3,6 +3,7 @@ package br.com.uti.entity;
 import java.util.Calendar;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -44,21 +45,20 @@ public class Enfermeiro {
 	@Enumerated(EnumType.STRING)
 	private TipoSanguineo tipoSanguineo;
 
-	@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinTable(name = "tb_enfermeiro_medicacao", joinColumns = @JoinColumn(name = "id_enfermeiro"), inverseJoinColumns = @JoinColumn(name = "id_medicacao"))
 	private List<Medicacao> medicacoes;
 
 	public Enfermeiro() {
 	}
 
-	public Enfermeiro(String coren, String nome, Calendar dataNascimento, TipoSanguineo tipoSanguineo,
-			List<Medicacao> medicacoes) {
-		super();
+	public Enfermeiro(String coren, String nome, Calendar dataNascimento, TipoSanguineo tipoSanguineo) {
+
 		this.coren = coren;
 		this.nome = nome;
 		this.dataNascimento = dataNascimento;
 		this.tipoSanguineo = tipoSanguineo;
-		this.medicacoes = medicacoes;
+
 	}
 
 	public long getCodigo() {
