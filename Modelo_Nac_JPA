@@ -1,0 +1,103 @@
+
+CREATE TABLE tb_responsavel(
+    id_responsavel NUMERIC NOT NULL PRIMARY KEY,
+    ds_nome VARCHAR(100) NOT NULL,
+	dt_nascimento DATE,
+    ds_sexo CHAR(1) NOT NULL,
+	ds_cpf VARCHAR(11) NOT NULL,
+	ds_telefone VARCHAR(12),
+	ds_parentesco VARCHAR(30) NOT NULL
+);
+
+CREATE TABLE tb_medico(
+    id_medico NUMERIC NOT NULL PRIMARY KEY,
+    ds_CRM VARCHAR(20) NOT NULL,
+	ds_nome VARCHAR(100) NOT NULL,
+    dt_nascimento DATE,
+    ds_nacionaliade VARCHAR(100) NOT NULL,
+	tp_sanguineo VARCHAR(13)--enum A_NEGATIVO, A_POSITIVO, O_NEGATIVO, O_POSITIVO, B_NEGATIVO, B_POSITIVO, AB_NEGATIVO, AB_POSITIVO
+	
+);
+
+CREATE TABLE tb_enfermeiro(
+    id_enfermeiro NUMERIC PRIMARY KEY,
+    ds_coren VARCHAR(20) NOT NULL,
+    ds_nome VARCHAR(100) NOT NULL,
+    dt_nascimento DATE,
+	tp_sanguineo VARCHAR(13)--enum A_NEGATIVO, A_POSITIVO, O_NEGATIVO, O_POSITIVO, B_NEGATIVO, B_POSITIVO, AB_NEGATIVO, AB_POSITIVO
+);
+			
+CREATE TABLE tb_medicacao(
+	id_medicacao NUMERIC NOT NULL PRIMARY KEY,
+	qt_dosagem NUMERIC NOT NULL,
+	ds_nome VARCHAR(100) NOT NULL,
+	ds_descricao VARCHAR(255),
+	ds_observacao VARCHAR(255),
+	dt_medicacao DATE
+);
+
+CREATE TABLE tb_exame(
+    id_exame NUMERIC NOT NULL PRIMARY KEY,
+    ds_exame VARCHAR(50) NOT NULL,
+    ds_observacao VARCHAR(255),
+	dt_exame DATE
+);
+
+
+CREATE TABLE tb_endereco(
+    id_endereco NUMERIC PRIMARY KEY,
+    ds_logradouro VARCHAR(30) NOT NULL,
+    ds_numero VARCHAR(8) NOT NULL, 
+    ds_complemento VARCHAR(30),
+    ds_cep VARCHAR(9) NOT NULL,
+    ds_bairro VARCHAR(100) NOT NULL,
+    ds_cidade VARCHAR(100) NOT NULL,
+    tp_uf VARCHAR(2),--enum  AC, AL, AM, AP, BA, CE, DF, ES, GO, MA, MG, MS, MT, PA, PB, PE, PI, PR, RJ, RN, RO, RR, RS, SC, SE, SP, TO
+	id_responsavel NUMERIC NOT NULL,
+    CONSTRAINT fk_responsavel FOREIGN KEY (id_responsavel) REFERENCES tb_responsavel(id_responsavel)
+);
+
+CREATE TABLE tb_paciente(
+    id_paciente NUMERIC PRIMARY KEY,
+    ds_nome VARCHAR(100) NOT NULL,
+	dt_nascimento DATE,
+    ds_sexo CHAR(1) NOT NULL,
+	tp_sanguineo VARCHAR(13),--enum A_NEGATIVO, A_POSITIVO, O_NEGATIVO, O_POSITIVO, B_NEGATIVO, B_POSITIVO, AB_NEGATIVO, AB_POSITIVO
+	ds_alergia_medicacao VARCHAR(30),
+	ds_etnia VARCHAR(30),
+	tp_estado_paciente VARCHAR(30),-- enum instavel, estavel, critico, cirurgia  
+	id_medico NUMERIC NOT NULL,
+    id_responsavel NUMERIC NOT NULL,
+	
+	CONSTRAINT fk_medico FOREIGN KEY (id_medico) REFERENCES tb_medico(id_medico),
+	CONSTRAINT fk_responsavel_1 FOREIGN KEY (id_responsavel) REFERENCES tb_responsavel(id_responsavel)
+);
+
+
+-- TABELA DE ASSOCIAÇÃO
+-- MEDICO_MEDICACAO
+-- id_medico NUMERIC PRIMARY KEY,
+-- id_medicacao NUMERIC PRIMARY KEY
+
+-- TABELA DE ASSOCIAÇÃO
+-- PACIENTE_MEDICACAO
+-- id_paciente NUMERIC PRIMARY KEY,
+-- id_medicacao NUMERIC PRIMARY KEY
+
+-- TABELA DE ASSOCIAÇÃO
+-- ENFERMEIRO_MEDICACAO
+-- id_enfermeiro NUMERIC PRIMARY KEY,
+-- id_medicacao NUMERIC PRIMARY KEY
+   
+-- TABELA DE ASSOCIAÇÃO
+-- MEDICO_EXAME
+-- id_medico NUMERIC PRIMARY KEY,
+-- id_exame NUMERIC PRIMARY KEY
+
+-- TABELA DE ASSOCIAÇÃO
+-- PACIENTE_EXAME
+-- id_paciente NUMERIC PRIMARY KEY,
+-- id_exame NUMERIC PRIMARY KEY
+
+
+	
