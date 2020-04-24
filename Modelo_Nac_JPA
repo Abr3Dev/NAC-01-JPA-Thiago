@@ -1,3 +1,16 @@
+drop table TB_MEDICO_MEDICACAO;
+drop table tb_PACIENTE_MEDICACAO;
+drop table tb_ENFERMEIRO_MEDICACAO;
+drop table tb_MEDICO_EXAME;
+drop table tb_PACIENTE_EXAME;
+drop table tb_PACIENTE;
+drop table tb_endereco;
+drop table tb_exame;
+drop table tb_medicacao;
+drop table tb_enfermeiro;
+drop table tb_medico;
+drop table tb_responsavel;
+
 
 CREATE TABLE tb_responsavel(
     id_responsavel NUMERIC NOT NULL PRIMARY KEY,
@@ -73,31 +86,34 @@ CREATE TABLE tb_paciente(
 	CONSTRAINT fk_responsavel_1 FOREIGN KEY (id_responsavel) REFERENCES tb_responsavel(id_responsavel)
 );
 
+create table tb_medico_medicacao(
+    id_medico integer REFERENCES tb_medico(id_medico) ,
+    id_medicacao integer references tb_medicacao(id_medicacao),
+    primary key(id_medico, id_medicacao)
+);
 
--- TABELA DE ASSOCIAÇÃO
--- MEDICO_MEDICACAO
--- id_medico NUMERIC PRIMARY KEY,
--- id_medicacao NUMERIC PRIMARY KEY
+create table tb_paciente_medicacao(
+    id_paciente integer references tb_paciente(id_paciente),
+    id_medicacao integer references tb_medicacao(id_medicacao),
+    primary key(id_paciente, id_medicacao)
+);
 
--- TABELA DE ASSOCIAÇÃO
--- PACIENTE_MEDICACAO
--- id_paciente NUMERIC PRIMARY KEY,
--- id_medicacao NUMERIC PRIMARY KEY
+create table tb_ENFERMEIRO_MEDICACAO(
+    id_enfermeiro integer references tb_enfermeiro(id_enfermeiro),
+    id_medicacao integer references tb_medicacao(id_medicacao),
+    primary key(id_enfermeiro, id_medicacao)
+);
 
--- TABELA DE ASSOCIAÇÃO
--- ENFERMEIRO_MEDICACAO
--- id_enfermeiro NUMERIC PRIMARY KEY,
--- id_medicacao NUMERIC PRIMARY KEY
-   
--- TABELA DE ASSOCIAÇÃO
--- MEDICO_EXAME
--- id_medico NUMERIC PRIMARY KEY,
--- id_exame NUMERIC PRIMARY KEY
+create table tb_MEDICO_EXAME(
+    id_medico integer REFERENCES tb_medico(id_medico) ,
+    id_exame integer references tb_exame(id_exame),
+    primary key(id_medico, id_exame)
+);
 
--- TABELA DE ASSOCIAÇÃO
--- PACIENTE_EXAME
--- id_paciente NUMERIC PRIMARY KEY,
--- id_exame NUMERIC PRIMARY KEY
+create table tb_PACIENTE_EXAME(
+    id_paciente integer references tb_paciente(id_paciente),
+    id_exame integer references tb_exame(id_exame),
+    primary key(id_paciente, id_exame)
+);
 
 
-	
