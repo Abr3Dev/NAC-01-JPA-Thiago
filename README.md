@@ -4,7 +4,7 @@
 
 - [x] *modelagem do banco de dados*
 - [x] *__Singletone__* e *__DAO Genérico__*
-- [ ] *método __main__ para  cadastrar  todas  as  entidades*
+- [x] *método __main__ para  cadastrar  todas  as  entidades*
 
 ## Alunos Turma 2TDSJ 
 
